@@ -19,9 +19,6 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Grant execution rights for scripts
-      run: sudo chmod +x ./node_modules/.bin/react-scripts
-
     - name: Install frontend dependencies
       working-directory: ./meta-photo
       run: npm install
