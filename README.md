@@ -1,117 +1,82 @@
-# MetaPhoto Application
+MetaPhoto Application
+Description
 
-MetaPhoto is a web application that helps photographers organize their photo libraries. This project consists of a frontend application built with React and a backend API built with Fastify.
+MetaPhoto is an application designed to help photographers organize their photo libraries. It includes a frontend built with React and a backend built with Fastify.
+Setup Instructions
+Prerequisites
 
-## Project Structure
+    Node.js (>=14.x)
+    npm (>=6.x) or yarn (>=1.x)
 
-meta-photo/
-│
-├── meta-photo-api/ # Fastify backend
-│ ├── dist/ # Compiled files
-│ ├── node_modules/ # Dependencies
-│ ├── src/ # Source code
-│ ├── package.json # Backend dependencies and scripts
-│ ├── tsconfig.json # TypeScript configuration
-│ └── ...
-│
-├── meta-photo/ # React frontend
-│ ├── build/ # Compiled files
-│ ├── node_modules/ # Dependencies
-│ ├── public/ # Public assets
-│ ├── src/ # Source code
-│ ├── package.json # Frontend dependencies and scripts
-│ ├── tsconfig.json # TypeScript configuration
-│ └── ...
-│
-└── .gitignore # Git ignore rules
-└── README.md # This file
+Clone the repository
 
-markdown
+bash
 
+git clone https://github.com/yourusername/metaphoto.git
+cd metaphoto
 
-## Prerequisites
+Install dependencies for the frontend and backend
 
-- Node.js (>= 14.x)
-- npm (>= 6.x) or yarn (>= 1.x)
+Navigate to the frontend directory and install the dependencies:
 
-## Getting Started
-
-### Backend (meta-photo-api)
-
-1. Navigate to the `meta-photo-api` directory:
-
-   ```sh
-   cd meta-photo-api
-
-    Install the dependencies:
-
-    sh
-
-npm install
-# or
-yarn install
-
-Start the backend server:
-
-sh
-
-    npm run dev
-    # or
-    yarn dev
-
-    The server should be running on http://localhost:3000.
-
-Frontend (meta-photo)
-
-    Navigate to the meta-photo directory:
-
-    sh
+bash
 
 cd meta-photo
-
-Install the dependencies:
-
-sh
-
 npm install
-# or
-yarn install
 
-Start the frontend development server:
+Navigate to the backend directory and install the dependencies:
 
-sh
+bash
 
-    npm start
-    # or
-    yarn start
+cd ../meta-photo-api
+npm install
 
-    The application should be running on http://localhost:3001.
+Running the Application
+Running the backend server
 
-Special Instructions
+In the meta-photo-api directory, run the following command:
 
-    Ensure that both the frontend and backend servers are running simultaneously.
-    You can configure the backend API URL in the frontend by modifying the src/services/api.ts file in the meta-photo directory.
+sql
 
-Scripts
-Backend
+npm start
 
-    npm run dev or yarn dev: Start the development server.
-    npm run build or yarn build: Build the project for production.
-    npm run start or yarn start: Start the production server.
+The backend server will start on http://localhost:3000.
+Running the frontend application
 
-Frontend
+In the meta-photo directory, run the following command:
 
-    npm start or yarn start: Start the development server.
-    npm run build or yarn build: Build the project for production.
-    npm run test or yarn test: Run tests.
+sql
 
-Project Details
-Backend
+npm start
 
-The Fastify backend provides API endpoints to fetch photo data, enriched with album and user information. It also supports filtering and pagination.
-Frontend
+The frontend application will start on http://localhost:3001.
+API Endpoints
+Get Enriched Photo
 
-The React frontend displays the photo library with options to filter by title, album title, and user email. It also supports pagination to navigate through the photos.
-License
+bash
 
-This project is licensed under the MIT License.
+GET /externalapi/photos/:id
+
+Returns a photo enriched with album and user information.
+Get Filtered Photos
+
+bash
+
+GET /externalapi/photos
+
+Query parameters:
+
+    title: Filter by photo title (contains)
+    albumTitle: Filter by album title (contains)
+    email: Filter by user email (equals)
+    limit: Maximum number of items to retrieve (default: 25)
+    offset: Starting offset into the collection (default: 0)
+
+Example Queries
+
+    Get a photo with enrichment: http://localhost:3000/externalapi/photos/1
+    Get filtered photos: http://localhost:3000/externalapi/photos?title=accusamus&limit=10&offset=0
+
+Contact
+
+For any inquiries, please contact support@metaphoto.com.
