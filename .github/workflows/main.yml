@@ -23,6 +23,10 @@ jobs:
       working-directory: ./meta-photo
       run: npm install
 
+    - name: Grant execution rights for react-scripts
+      working-directory: ./meta-photo
+      run: chmod +x ./node_modules/.bin/react-scripts
+
     - name: Build frontend
       working-directory: ./meta-photo
       run: npm run build
