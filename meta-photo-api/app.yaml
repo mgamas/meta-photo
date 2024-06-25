@@ -7,5 +7,5 @@ automatic_scaling:
   min_instances: 1
   max_instances: 5
 handlers:
-  - url: /api/.*
+  - url: /.*
     script: auto
