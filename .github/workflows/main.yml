@@ -37,20 +37,23 @@ jobs:
 
     - name: Build backend
       working-directory: ./meta-photo-api
-      run: npm run build
+      run: |
+        echo "No build step necessary for Fastify"
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT }}
 
     - name: Deploy to App Engine (Frontend)
       working-directory: ./meta-photo
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
       run: |
         gcloud config set project ${{ secrets.GCP_PROJECT }}
         gcloud app deploy --quiet
 
     - name: Deploy to App Engine (Backend)
       working-directory: ./meta-photo-api
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
       run: |
         gcloud config set project ${{ secrets.GCP_PROJECT }}
         gcloud app deploy --quiet
