@@ -2,30 +2,6 @@
 
 MetaPhoto is a web application that helps photographers organize their photo libraries. This project consists of a frontend application built with React and a backend API built with Fastify.
 
-## Project Structure
-
-meta-photo/
-│
-├── meta-photo-api/ # Fastify backend
-│ ├── dist/ # Compiled files
-│ ├── node_modules/ # Dependencies
-│ ├── src/ # Source code
-│ ├── package.json # Backend dependencies and scripts
-│ ├── tsconfig.json # TypeScript configuration
-│ └── ...
-│
-├── meta-photo/ # React frontend
-│ ├── build/ # Compiled files
-│ ├── node_modules/ # Dependencies
-│ ├── public/ # Public assets
-│ ├── src/ # Source code
-│ ├── package.json # Frontend dependencies and scripts
-│ ├── tsconfig.json # TypeScript configuration
-│ └── ...
-│
-└── .gitignore # Git ignore rules
-└── README.md # This file
-
 ## Prerequisites
 
 - Node.js (>= 14.x)
@@ -55,29 +31,23 @@ The server should be running on http://localhost:3000.
 
 Frontend (meta-photo)
 
-    Navigate to the meta-photo directory:
+Navigate to the meta-photo directory:
 
-    sh
-
-cd meta-photo
+    cd meta-photo
 
 Install the dependencies:
 
-sh
-
-npm install
-# or
-yarn install
+      npm install
+      # or
+      yarn install
 
 Start the frontend development server:
-
-sh
 
     npm start
     # or
     yarn start
 
-    The application should be running on http://localhost:3001.
+The application should be running on http://localhost:3001.
 
 Special Instructions
 
@@ -100,9 +70,29 @@ Frontend
 Project Details
 Backend
 
-The Fastify backend provides API endpoints to fetch photo data, enriched with album and user information. It also supports filtering and pagination.
+   The Fastify backend provides API endpoints to fetch photo data, enriched with album and user information. It also supports filtering and pagination.
 
 Frontend
 
-The React frontend displays the photo library with options to filter by title, album title, and user email. It also supports pagination to navigate through the photos.
+   The React frontend displays the photo library with options to filter by title, album title, and user email. It also supports pagination to navigate through the photos.
+
+GET /externalapi/photos/
+
+      Returns a photo enriched with album and user information.
+
+      ### Get Filtered Photos
+
+      Query parameters:
+      - `title`: Filter by photo title (contains)
+      - `albumTitle`: Filter by album title (contains)
+      - `email`: Filter by user email (equals)
+      - `limit`: Maximum number of items to retrieve (default: 25)
+      - `offset`: Starting offset into the collection (default: 0)
+
+      ## Example Queries
+      - Get a photo with enrichment: `http://localhost:3000/externalapi/photos/1`
+      - Get filtered photos: `http://localhost:3000/externalapi/photos?title=accusamus&limit=10&offset=0`
+
+
+
    
