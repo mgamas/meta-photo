@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { fetchPhotos } from '../services/api';
 import PhotoCard from '../components/PhotoCard';
 import '../styles/PhotoGallery.css';
@@ -12,13 +12,13 @@ const PhotoGallery: React.FC = () => {
   const [offset, setOffset] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
-  const buildQuery = () => {
+  const buildQuery = useCallback(() => {
     let query = `?limit=${limit}&offset=${offset}`;
     if (title) query += `&title=${title}`;
     if (albumTitle) query += `&albumTitle=${albumTitle}`;
     if (email) query += `&email=${email}`;
     return query;
-  };
+  }, [title, albumTitle, email, limit, offset]);
 
   useEffect(() => {
     const loadPhotos = async () => {
@@ -31,7 +31,7 @@ const PhotoGallery: React.FC = () => {
       }
     };
     loadPhotos();
-  }, [title, albumTitle, email, limit, offset]);
+  }, [buildQuery]);
 
   const currentPage = Math.floor(offset / limit) + 1;
 
