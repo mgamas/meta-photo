@@ -33,7 +33,8 @@ server.get('/externalapi/photos', async (request, reply) => {
 
 const start = async () => {
   try {
-    await server.listen(3000);
+    const PORT = process.env.PORT || 8080;
+    await server.listen(PORT, '0.0.0.0');
     console.log('Server listening on http://localhost:3000');
   } catch (err) {
     console.log(err);
