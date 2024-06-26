@@ -1,4 +1,4 @@
-name: Deploy to Google App Engine
+name: Deploy to Google Cloud
 
 on:
   push:
@@ -19,36 +19,58 @@ jobs:
       with:
         node-version: '18'
 
+    # Frontend build steps
     - name: Install frontend dependencies
       working-directory: ./meta-photo
       run: npm install
-
-    - name: Grant execution rights for react-scripts
-      working-directory: ./meta-photo
-      run: chmod +x ./node_modules/.bin/react-scripts
 
     - name: Build frontend
       working-directory: ./meta-photo
       run: npm run build
 
+    # Backend build steps
     - name: Install backend dependencies
       working-directory: ./meta-photo-api
       run: npm install
 
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.2.0
+    - name: Build Docker image for backend
+      working-directory: ./meta-photo-api
+      run: |
+        docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/meta-photo-api:$GITHUB_SHA .
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0
       with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Configure Docker for Google Cloud
+      run: gcloud auth configure-docker
+
+    - name: Push Docker image to Google Container Registry
+      working-directory: ./meta-photo-api
+      run: |
+        docker push gcr.io/${{ secrets.GCP_PROJECT }}/meta-photo-api:$GITHUB_SHA
+
+    - name: Deploy to Cloud Run (Backend)
+      run: |
+        gcloud run deploy meta-photo-api \
+          --image gcr.io/${{ secrets.GCP_PROJECT }}/meta-photo-api:$GITHUB_SHA \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated
+
+    # Deploy Frontend to App Engine
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
         project_id: ${{ secrets.GCP_PROJECT }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
 
     - name: Deploy to App Engine (Frontend)
       working-directory: ./meta-photo
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
       run: |
         gcloud config set project ${{ secrets.GCP_PROJECT }}
-        gcloud app deploy --quiet
-
-    - name: Deploy to App Engine (Backend)
-      working-directory: ./meta-photo-api
-      run: |
-        gcloud config set project ${{ secrets.GCP_PROJECT }}
-        gcloud app deploy --quiet
+        gcloud app deploy app.yaml --quiet

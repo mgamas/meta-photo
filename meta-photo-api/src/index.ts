@@ -4,12 +4,14 @@ import { getEnrichedPhoto, getFilteredPhotos } from './api';
 
 const server = Fastify();
 
-server.register(cors);
-
 server.get('/externalapi/photos/:id', async (request, reply) => {
   const { id } = request.params as { id: string };
   const photo = await getEnrichedPhoto(parseInt(id));
   reply.send(photo);
+});
+
+server.register(cors, {
+  origin: '*'
 });
 
 server.get('/externalapi/photos', async (request, reply) => {
@@ -34,7 +36,7 @@ server.get('/externalapi/photos', async (request, reply) => {
 const start = async () => {
   try {
     const PORT = process.env.PORT || 8080;
-    await server.listen(PORT, '0.0.0.0');
+    await server.listen(8080, '0.0.0.0');
     console.log('Server listening on http://localhost:3000');
   } catch (err) {
     console.log(err);
